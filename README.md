@@ -76,16 +76,6 @@ PhyloFastStrat/
 
 The disease gene lists themselves are **not stored in the repo**. They live in a public Google Sheet, and the app reads them at startup via `googlesheets4::gs4_deauth()`. To use your own gene lists, either edit the master sheet (if you have access) or change `MASTER_SHEET_URL` near the top of `app.R` to point at your own sheet (which must be set to "Anyone with the link: Viewer").
 
-### Deploy your own instance to shinyapps.io
-
-1. Make a free account at https://www.shinyapps.io
-2. Get your account token from Account → Tokens, and run the `rsconnect::setAccountInfo(...)` snippet it gives you.
-3. From R, with your working directory set to the repo root:
-   ```r
-   source("deploy.R")
-   ```
-   The first deploy installs all Bioconductor dependencies on the shinyapps.io server and can take 20–30 minutes. Subsequent deploys are usually under 2 minutes.
-
 ### Updating the gene list
 
 The master gene list lives at the Google Sheet URL hardcoded in `app.R` (`MASTER_SHEET_URL`). Edit the sheet, and the app picks up the changes the next time it starts. (On shinyapps.io free tier the app sleeps every ~5 min, so changes propagate fast.)
