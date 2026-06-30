@@ -1,0 +1,32 @@
+# R session / history
+.Rhistory
+.RData
+.Rapp.history
+.Ruserdata
+
+# RStudio
+.Rproj.user/
+*.Rproj
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# rsconnect deployment artifacts
+rsconnect/
+
+# renv (if you ever start using it)
+renv/library/
+renv/local/
+renv/lock/
+renv/python/
+renv/staging/
+
+# Local credentials — NEVER commit
+.httr-oauth
+.secrets/
+service-account*.json
+
+# Local working files
+GO_df_output.rds
+*.log
