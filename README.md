@@ -2,7 +2,7 @@
 
 An interactive Shiny app for exploring the evolutionary origins of disease-associated genes. Maps any set of human genes onto a phylostratigraphic timeline, tests for enrichment in each phylostratum, and runs GO biological process over-representation analysis at each evolutionary stratum.
 
-**Live app:** _https://rishabhaldar.shinyapps.io/PhyloFastStrat/>)_
+**Live app:** _https://rishabhaldar.shinyapps.io/PhyloFastStrat/)_
 
 ---
 
