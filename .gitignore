@@ -30,3 +30,11 @@ service-account*.json
 # Local working files
 GO_df_output.rds
 *.log
+
+# Manuscript outputs: keep local, not public
+PhyloOutputs/
+figures/
+scispace_phylo_export/
+fig_*.png
+atherosclerosis_*_v034.csv
+*.numbers
