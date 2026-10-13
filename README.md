@@ -101,7 +101,13 @@ Then commit and redeploy.
 
 ## Citation
 
-If you use PhyloFastStrat in published work, please cite [_paper / preprint citation pending_]. The underlying phylostratigraphy method is from Domazet-Lošo & Tautz (2008) and uses Arendsee's `phylostratr` R package.
+If you use PhyloFastStrat in your work, please cite:
+
+> Natterson-Horowitz B, Haldar R, Sawyer D. Evolutionary Origins of Atherosclerosis: Ancient Conserved Biology Underlies Disease Vulnerability and Constrains Therapeutic Modification. *Manuscript under review at* Journal of the American College of Cardiology (JACC), 2026.
+
+A full citation with DOI will be added here upon publication.
+
+The underlying phylostratigraphy method is from Domazet-Lošo & Tautz (2008) and uses Arendsee et al.'s [`phylostratr`](https://github.com/arendsee/phylostratr) R package.
 
 ## License
 
