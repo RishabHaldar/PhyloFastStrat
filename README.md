@@ -1,7 +1,7 @@
 # PhyloFastStrat
 
 An interactive Shiny app for exploring the evolutionary origins of disease-associated genes. Maps any set of human genes onto a phylostratigraphic timeline, tests for enrichment in each phylostratum, and runs GO biological process over-representation analysis at each evolutionary stratum.
-
+![PhyloFastStrat app showing gene emergence across phylostrata](images/app_screenshot.png)
 **Live app:** _https://rishabhaldar.shinyapps.io/PhyloFastStrat/)_
 
 ---
@@ -54,7 +54,7 @@ BiocManager::install(c(
 ))
 
 # Clone and run
-# git clone https://github.com/YOUR_USERNAME/PhyloFastStrat.git
+# git clone https://github.com/RishabHaldar/PhyloFastStrat.git
 # cd PhyloFastStrat
 # Open app.R in RStudio and click "Run App"
 ```
