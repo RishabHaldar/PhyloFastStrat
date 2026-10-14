@@ -36,28 +36,43 @@ The pipeline behind the app, briefly:
 - For a given user gene list, the app counts how many genes fall in each stratum and tests enrichment per stratum with **Fisher's exact test** on a 2×2 contingency table (disease vs. complement × in-stratum vs. out-of-stratum), with Benjamini-Hochberg FDR correction across strata.
 - GO biological process **over-representation** is run separately within each stratum using `topGO`'s classic Fisher algorithm against the full GO-annotated human gene universe. Fold enrichment is reported as observed / expected gene counts.
 
+## Methods decisions and validation
+
+Several analytical choices were revised after auditing earlier versions of the app:
+
+- **Over-representation, not ranked GSEA, for GO enrichment.** Version 0.3.2a passed fgsea a vector containing only the genes of interest, all scored 1. With no ranking across the gene universe, the resulting p-values weren't interpretable. Since 0.3.3, enrichment uses topGO's classic Fisher test against the full GO-annotated human gene universe, the standard approach for asking whether a gene set is over-represented in a term.
+- **Joining evolutionary dates by name, not row order.** Divergence times were originally attached to phylostrata by position in the reference table, which silently mislabels strata if the file is reordered. They're now matched by taxon name, and the app warns at startup if any stratum lacks a date. This check caught three spelling mismatches in the reference table (Haplorrhini, Homininae, Cellular organisms).
+- **Clear comparison groups.** The per-stratum enrichment test is a 2×2 Fisher's exact test of the gene list against its complement in the human proteome, with Benjamini-Hochberg correction across strata. The emergence plot labels the comparison line "Other human genes" so the two curves aren't mistaken for overlapping sets.
+- **Divergence times.** Stratum dates are approximate literature estimates; the root (cellular organisms) is set at 4,200 million years ago, consistent with recent estimates for the last universal common ancestor.
+
 ---
 
 ## For developers
 
 ### Run locally
 
-```r
-# Install dependencies (one-time)
-install.packages("BiocManager")
-BiocManager::install(c(
-  "shiny", "shinyjs", "shinycssloaders", "shinyWidgets", "shinythemes",
-  "readxl", "DT", "tidyverse", "ggtext", "ggrepel", "ggpubr",
-  "googlesheets4",
-  "org.Hs.eg.db", "topGO", "GO.db", "AnnotationDbi", "STRINGdb",
-  "phylostratr"
-))
+1. Clone the repository:
 
-# Clone and run
-# git clone https://github.com/RishabHaldar/PhyloFastStrat.git
-# cd PhyloFastStrat
-# Open app.R in RStudio and click "Run App"
+```bash
+git clone https://github.com/RishabHaldar/PhyloFastStrat.git
+cd PhyloFastStrat
 ```
+
+2. Install the exact package versions used by the app (one-time; may take a while because of the Bioconductor packages):
+
+```r
+install.packages("renv")
+renv::restore()
+```
+
+3. Run the app:
+
+```r
+shiny::runApp()
+```
+
+Or open `app.R` in RStudio and click **Run App**.
+
 
 ### Repository layout
 
