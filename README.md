@@ -2,7 +2,7 @@
 
 An interactive Shiny app for exploring the evolutionary origins of disease-associated genes. Maps any set of human genes onto a phylostratigraphic timeline, tests for enrichment in each phylostratum, and runs GO biological process over-representation analysis at each evolutionary stratum.
 ![PhyloFastStrat app showing gene emergence across phylostrata](images/app_screenshot.png)
-**Live app:** _https://rishabhaldar.shinyapps.io/PhyloFastStrat/)_
+**Live app:** [rishabhaldar.shinyapps.io/PhyloFastStrat](https://rishabhaldar.shinyapps.io/PhyloFastStrat/)
 
 ---
 
@@ -35,6 +35,10 @@ The pipeline behind the app, briefly:
 - Every human protein is assigned a **phylostratum** — the most recent common ancestor in which a homolog can be detected — using [`phylostratr`](https://github.com/arendsee/phylostratr) with BLAST against a panel of representative species. Detection uses an adjusted p-value cutoff of 0.001.
 - For a given user gene list, the app counts how many genes fall in each stratum and tests enrichment per stratum with **Fisher's exact test** on a 2×2 contingency table (disease vs. complement × in-stratum vs. out-of-stratum), with Benjamini-Hochberg FDR correction across strata.
 - GO biological process **over-representation** is run separately within each stratum using `topGO`'s classic Fisher algorithm against the full GO-annotated human gene universe. Fold enrichment is reported as observed / expected gene counts.
+
+By default, the application retains alternative UniProt entries. Selecting 'Exclude alternative isoforms' assigns each mapped gene a single phylostratum based on its earliest-emerging entry. Gene-level enrichment analyses should use this setting.
+
+Gene Ontology biological-process enrichment is evaluated against the annotated human gene background. The primary GO visualization displays unadjusted p-values; adjusted values are available in the detailed results.
 
 ## Methods decisions and validation
 
@@ -79,40 +83,33 @@ Or open `app.R` in RStudio and click **Run App**.
 ```
 PhyloFastStrat/
 ├── app.R                              # Shiny app
+├── deploy.R                           # One-line redeploy helper
+├── renv.lock                          # Pinned package versions (R 4.4.2, Bioconductor 3.20)
 ├── data/
 │   ├── ph_0.001.rds                   # Phylostratigraphy result table
 │   ├── uniprot_gene_conv_df_updated.rds  # UniProt ↔ gene symbol map
-│   ├── Final_Taxa_Emergence_Timeline_with_Cellular_Organisms.csv  # MYA per stratum
-│   └── MasterGeneLists_fallback.rds   # (optional) cached gene list snapshot
-├── deploy.R                           # One-line redeploy helper
+│   └── Final_Taxa_Emergence_Timeline_with_Cellular_Organisms.csv  # MYA per stratum
+├── images/
+│   └── app_screenshot.png             # Screenshot shown in this README
+├── CHANGELOG.md
+├── LICENSE
 ├── README.md
 └── .gitignore
 ```
+
+`data/MasterGeneLists_fallback.rds` is not included in the repository. `app.R` reads it only if the Google Sheet cannot be loaded; without it, the app stops at startup when the sheet is unreachable.
 
 The disease gene lists themselves are **not stored in the repo**. They live in a public Google Sheet, and the app reads them at startup via `googlesheets4::gs4_deauth()`. To use your own gene lists, either edit the master sheet (if you have access) or change `MASTER_SHEET_URL` near the top of `app.R` to point at your own sheet (which must be set to "Anyone with the link: Viewer").
 
 ### Updating the gene list
 
-The master gene list lives at the Google Sheet URL hardcoded in `app.R` (`MASTER_SHEET_URL`). Edit the sheet, and the app picks up the changes the next time it starts. (On shinyapps.io free tier the app sleeps every ~5 min, so changes propagate fast.)
-
-To keep a fallback snapshot in the repo (so the app still works if the sheet ever goes down), run interactively:
-
-```r
-library(googlesheets4)
-gs4_deauth()
-sheet <- read_sheet("YOUR_SHEET_URL")
-saveRDS(sheet, "data/MasterGeneLists_fallback.rds")
-```
-
-Then commit and redeploy.
+The application retrieves curated gene lists from a public Google Sheet at startup. Updates to the curated lists can be made directly in the source sheet by authorized editors. Changes are loaded when the application restarts. The optional local fallback dataset is not distributed with this repository.
 
 ---
 
 ## Version history
 
-- **0.3.4** — Public deployment-ready. Google Sheets read via `gs4_deauth()`; cached RDS fallback.
-- **0.3.3** — Replaced fgsea (ranked GSEA, not appropriate for ORA) with topGO Fisher. GO p-value sliders now actually filter the plot. MYA annotations joined by taxon name rather than row order. Various small bug fixes.
-- **0.3.2a** — Last pre-fix release.
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Citation
 
